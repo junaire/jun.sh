@@ -8,7 +8,7 @@ is_root(){
 	[ "${EUID}" -ne 0 ] && echo "The script must be ran as root!" && exit 1
 }
 
-config_ssh() {
+config_ssh(){
 	if [ -d "~/.ssh" ] ;
 	then
 		mkdir -p ~/.ssh
@@ -23,5 +23,12 @@ config_ssh() {
 	systemctl restart sshd.service
 }
 
+install_tools(){
+	yum update && yum upgrade
+	yum install vim git wget curl tree -y
+	yum install openssl openssl-devel zlib zlib-devel pcre pcre-devel gcc gcc-c++ epel-release yum-utils -y
+}
+
 is_root
 config_ssh
+install_tools
