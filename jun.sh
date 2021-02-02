@@ -9,13 +9,17 @@ is_root(){
 }
 
 config_ssh(){
-	if [ -d "~/.ssh" ] ;
+	if ! [ -d "~/.ssh" ] ;
 	then
 		mkdir -p ~/.ssh
+		chmod 700 ~/.ssh
 	fi
 
 	[ -z "${PUBLIC_KEY}" ] && echo "Please configure your ssh public key!" && exit 1
 	echo "${PUBLIC_KEY}" > ~/.ssh/authorized_keys
+
+	chmod 644 ~/.ssh/authorized_keys
+
 
 	sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
 	sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
